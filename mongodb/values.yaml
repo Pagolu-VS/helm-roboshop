@@ -1,0 +1,3 @@
+statefulset:
+  imageUrl: vidya07422/mongodb
+  imageVersion: v1
