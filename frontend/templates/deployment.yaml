@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: {{ .Values.statefulset.imageUrl }}:{{ .Values.statefulset.imageVersion }}
+        image: {{ .Values.deployment.imageUrl }}:{{ .Values.deployment.imageVersion }}
         resources:
           requests:
             cpu: "50m"
