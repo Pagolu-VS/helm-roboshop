@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:150450879000:certificate/165818ac-4bb5-41cb-a373-87b2bcdbbb43
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+    alb.ingress.kubernetes.io/group.name: roboshop
+spec:
+  ingressClassName: alb
+  rules:
+  - host: "iamvidya.online"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 8080
