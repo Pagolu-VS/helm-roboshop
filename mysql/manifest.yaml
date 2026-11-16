@@ -38,17 +38,35 @@ spec:
         project: roboshop
         tier: db
     spec:
-      serviceAccount: aws-secret-reader
+      serviceAccountName: aws-secret-reader
       volumes:
       - name: mysql-secret
         emptyDir: {}
       containers:
-      - name: mysql
-        image: vidya07422/mysql:v2
-        imagePullPolicy: Always
-        volumeMounts:
+        containers:
+        - name: mysql
+          image: vidya07422/mysql:v2
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Checking shared volume"
+              ls -lah /tmp/
+              if [ -f /tmp/mysql_root_password.txt ]; then
+                echo "Password file exists"
+              else
+                echo "Password file missing"
+              fi
+              sleep 3600
+          volumeMounts:
           - mountPath: /tmp
             name: mysql-secret
+      # - name: mysql
+      #   image: vidya07422/mysql:v2
+      #   imagePullPolicy: Always
+      #   volumeMounts:
+      #     - mountPath: /tmp
+      #       name: mysql-secret
       initContainers:
       - name: init-myservice
         image: amazon/aws-cli
