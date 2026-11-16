@@ -53,26 +53,11 @@ spec:
       initContainers:
       - name: init-myservice
         image: amazon/aws-cli
-        # command:
-        # - sh 
-        # - -c 
-        # - |
-        #   aws secretsmanager get-secret-value --secret-id roboshop/mysql/password --query SecretString --output text | jq -r .MYSQL_ROOT_PASSWORD > /tmp/mysql_root_password.txt
         command:
-          - sh
-          - -c
-          - |
-            set -e
-            set -o pipefail
-
-            aws secretsmanager get-secret-value \
-              --secret-id roboshop/mysql/password \
-              --query SecretString \
-              --output text |
-              jq -er '.MYSQL_ROOT_PASSWORD | select(type == "string" and length > 0)' \
-              > /tmp/mysql_root_password.txt
-
-            echo "MySQL password retrieved successfully" 
+        - sh 
+        - -c 
+        - |
+          aws secretsmanager get-secret-value --secret-id roboshop/mysql/password --query SecretString --output text | jq -r .MYSQL_ROOT_PASSWORD > /tmp/mysql_root_password.txt
         volumeMounts:
           - mountPath: /tmp
             name: mysql-secret
