@@ -46,6 +46,7 @@ spec:
       - name: mysql
         image: vidya07422/mysql:v2
         imagePullPolicy: Always
+        args: ["--mysql-native-password=ON"]
         volumeMounts:
           - mountPath: /tmp
             name: mysql-secret
@@ -56,7 +57,11 @@ spec:
         - sh 
         - -c 
         - |
-          aws secretsmanager get-secret-value --secret-id roboshop/mysql/password --query SecretString --output text | jq -r .MYSQL_ROOT_PASSWORD > /tmp/mysql_root_password.txt
+          aws secretsmanager get-secret-value --secret-id \
+          roboshop/mysql/password --query SecretString \
+          --output text | jq -r '.MYSQL_ROOT_PASSWORD' > /tmp/mysql_root_password.txt
+          echo "Secret fetched successfully"
+            
         volumeMounts:
           - mountPath: /tmp
             name: mysql-secret
